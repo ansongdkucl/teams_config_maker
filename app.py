@@ -4,7 +4,7 @@ from jinja2 import Environment, FileSystemLoader
 
 app = Flask(__name__)
 
-# Setup Jinja2 environment to look inside the 'templates' folder
+# Setup Jinja2 environment
 env = Environment(loader=FileSystemLoader('templates'))
 
 @app.route('/generate', methods=['POST'])
@@ -12,9 +12,10 @@ def generate_config():
     try:
         data = request.json
         hostname = data.get('hostname')
-        vlan = data.get('vlan')
-        interface = data.get('interface')
-        description = data.get('description', 'Access Port')
+        location = data.get('location')
+        access_vlan = data.get('access_vlan')
+        voice_vlan = data.get('voice_vlan')
+        ip_address = data.get('ip_address')
 
         # Load the template
         template = env.get_template('switch_template.txt')
@@ -22,9 +23,10 @@ def generate_config():
         # Render the config with variables
         rendered_config = template.render(
             hostname=hostname,
-            vlan=vlan,
-            interface=interface,
-            description=description
+            location=location,
+            access_vlan=access_vlan,
+            voice_vlan=voice_vlan,
+            ip_address=ip_address
         )
 
         return jsonify({
@@ -40,4 +42,4 @@ def index():
     return "✅ Config Generator is running!"
 
 if __name__ == '__main__':
-    app.run(port=5002)
+    app.run(port=5000)
