@@ -28,6 +28,9 @@ def generate_config():
             voice_vlan=voice_vlan,
             ip_address=ip_address
         )
+        # Ensure proper newlines are preserved
+        rendered_config = rendered_config.replace('\r\n', '\n').replace('\r', '\n')
+
 
         return jsonify({
             "success": True,
